@@ -1,0 +1,201 @@
+provider_code,provider_name,city,claim_type
+HSP0001,Choudhury Hospital,Panipat,health
+HSP0002,Konda Nursing Home,Kolhapur,health
+HSP0003,Chaudry Nursing Home,Gudivada,health
+HSP0004,Sami Nursing Home,Ludhiana,health
+HSP0005,Chander Medical Centre,Muzaffarpur,health
+HSP0006,Tiwari Nursing Home,Kishanganj,health
+HSP0007,Issac Hospital,Muzaffarnagar,health
+HSP0008,Sen Healthcare,Chennai,health
+HSP0009,Dutta Medical Centre,Mau,health
+HSP0010,Mall Healthcare,Thrissur,health
+HSP0011,Nayar Hospital,Tiruchirappalli,health
+HSP0012,Rai Medical Centre,Secunderabad,health
+HSP0013,Padmanabhan Nursing Home,Varanasi,health
+HSP0014,Sharaf Medical Centre,Burhanpur,health
+HSP0015,Brar Medical Centre,Tadipatri,health
+HSP0016,Pathak Hospital,Coimbatore,health
+HSP0017,Bath Multispeciality Hospital,Ramagundam,health
+HSP0018,Buch Multispeciality Hospital,Salem,health
+HSP0019,Rai Multispeciality Hospital,Malda,health
+HSP0020,Patla Nursing Home,Uluberia,health
+HSP0021,Pant Nursing Home,Shimoga,health
+HSP0022,Bora Nursing Home,Deoghar,health
+HSP0023,Konda Multispeciality Hospital,Surendranagar Dudhrej,health
+HSP0024,Raghavan Healthcare,Proddatur,health
+HSP0025,Kanda Hospital,Pimpri-Chinchwad,health
+HSP0026,Karnik Multispeciality Hospital,Satna,health
+HSP0027,Rattan Hospital,Amritsar,health
+HSP0028,Kakar Multispeciality Hospital,Rajpur Sonarpur,health
+HSP0029,Tata Healthcare,Berhampore,health
+HSP0030,Dhar Multispeciality Hospital,Kolhapur,health
+HSP0031,Koshy Healthcare,Bhimavaram,health
+HSP0032,Sangha Medical Centre,Mirzapur,health
+HSP0033,Kanda Nursing Home,Danapur,health
+HSP0034,Tak Medical Centre,Nashik,health
+HSP0035,Choudhary Multispeciality Hospital,Kozhikode,health
+HSP0036,Sami Nursing Home,Kharagpur,health
+HSP0037,Raj Healthcare,Dehri,health
+HSP0038,Krishnamurthy Multispeciality Hospital,Raipur,health
+HSP0039,Yadav Nursing Home,Mau,health
+HSP0040,Choudhury Multispeciality Hospital,Raebareli,health
+HSP0041,Dugar Nursing Home,Delhi,health
+HSP0042,Lall Nursing Home,Guna,health
+HSP0043,Cherian Medical Centre,Guna,health
+HSP0044,Issac Nursing Home,Dindigul,health
+HSP0045,Edwin Multispeciality Hospital,Khora ,health
+HSP0046,Naik Hospital,Surat,health
+HSP0047,Choudhury Hospital,Aizawl,health
+HSP0048,Khatri Medical Centre,New Delhi,health
+HSP0049,Brar Healthcare,Shivpuri,health
+HSP0050,Biswas Hospital,Warangal,health
+HSP0051,Soman Medical Centre,Bilaspur,health
+HSP0052,Wable Nursing Home,Rajpur Sonarpur,health
+HSP0053,Zacharia Multispeciality Hospital,Bijapur,health
+HSP0054,Rastogi Nursing Home,Bahraich,health
+HSP0055,Varughese Multispeciality Hospital,Jamshedpur,health
+HSP0056,Kota Healthcare,Rajkot,health
+HSP0057,Nigam Medical Centre,Giridih,health
+HSP0058,Karpe Medical Centre,Chennai,health
+HSP0059,Bobal Hospital,Berhampur,health
+HSP0060,Bir Medical Centre,Bathinda,health
+HSP0061,Bobal Healthcare,Alwar,health
+HSP0062,Sunder Hospital,Panvel,health
+HSP0063,Deo Nursing Home,Latur,health
+HSP0064,Solanki Medical Centre,Jhansi,health
+HSP0065,Chandra Nursing Home,Chinsurah,health
+HSP0066,Pandya Nursing Home,Bulandshahr,health
+HSP0067,Sibal Medical Centre,Navi Mumbai,health
+HSP0068,Bhat Multispeciality Hospital,Sonipat,health
+HSP0069,Chopra Nursing Home,Nellore,health
+HSP0070,Gupta Hospital,Kolhapur,health
+HSP0071,Sami Medical Centre,Alwar,health
+HSP0072,Shere Hospital,Aurangabad,health
+HSP0073,Savant Nursing Home,Dhanbad,health
+HSP0074,Zachariah Nursing Home,Tiruchirappalli,health
+HSP0075,Khalsa Hospital,Vellore,health
+HSP0076,Sunder Nursing Home,Kakinada,health
+HSP0077,Rattan Medical Centre,Dehradun,health
+HSP0078,Raghavan Nursing Home,Pali,health
+HSP0079,Lanka Hospital,Baranagar,health
+HSP0080,Sampath Hospital,Bhatpara,health
+GRG0001,Gupta Automobiles,Bellary,auto
+GRG0002,Bhardwaj Service Centre,Satara,auto
+GRG0003,Bhandari Auto Works,Bhimavaram,auto
+GRG0004,Sood Automobiles,Howrah,auto
+GRG0005,Trivedi Car Care,Gaya,auto
+GRG0006,Biswas Car Care,Noida,auto
+GRG0007,Raval Car Care,Jehanabad,auto
+GRG0008,Koshy Motors,Udupi,auto
+GRG0009,Bumb Automobiles,Ballia,auto
+GRG0010,Virk Motors,Bhilwara,auto
+GRG0011,Jayaraman Motors,Mathura,auto
+GRG0012,Lanka Auto Works,Mira-Bhayandar,auto
+GRG0013,Mital Auto Works,Satna,auto
+GRG0014,Bora Motors,Berhampore,auto
+GRG0015,Chaudhry Motors,Siwan,auto
+GRG0016,Kala Service Centre,Mira-Bhayandar,auto
+GRG0017,Palla Automobiles,Sambalpur,auto
+GRG0018,Pingle Motors,Sangli-Miraj & Kupwad,auto
+GRG0019,Sarma Auto Works,Pudukkottai,auto
+GRG0020,Wadhwa Car Care,Begusarai,auto
+GRG0021,Mistry Automobiles,Guntur,auto
+GRG0022,Lalla Service Centre,Aligarh,auto
+GRG0023,Dugal Service Centre,Ichalkaranji,auto
+GRG0024,Kade Car Care,Kurnool,auto
+GRG0025,Lalla Car Care,Chandrapur,auto
+GRG0026,Behl Motors,Bhusawal,auto
+GRG0027,Malhotra Automobiles,Delhi,auto
+GRG0028,Nath Automobiles,Firozabad,auto
+GRG0029,Edwin Motors,Suryapet,auto
+GRG0030,Sane Service Centre,Gorakhpur,auto
+GRG0031,Borra Motors,Bongaigaon,auto
+GRG0032,Banik Service Centre,Ballia,auto
+GRG0033,Divan Automobiles,Warangal,auto
+GRG0034,Barman Motors,Bharatpur,auto
+GRG0035,Baral Car Care,Bhagalpur,auto
+GRG0036,Krish Motors,Raichur,auto
+GRG0037,Ray Car Care,Patiala,auto
+GRG0038,Gaba Automobiles,Haridwar,auto
+GRG0039,Bakshi Motors,Thoothukudi,auto
+GRG0040,Sabharwal Auto Works,Shimoga,auto
+GRG0041,Dutta Automobiles,Eluru,auto
+GRG0042,Barad Auto Works,Korba,auto
+GRG0043,Iyengar Motors,Etawah,auto
+GRG0044,Mody Car Care,Rajahmundry,auto
+GRG0045,Bajwa Car Care,Silchar,auto
+GRG0046,Narasimhan Service Centre,Coimbatore,auto
+GRG0047,Mallick Auto Works,Danapur,auto
+GRG0048,Ratta Automobiles,Bhopal,auto
+GRG0049,D’Alia Car Care,Mangalore,auto
+GRG0050,Lanka Auto Works,Moradabad,auto
+GRG0051,Saraf Automobiles,Satara,auto
+GRG0052,Sarin Automobiles,Kharagpur,auto
+GRG0053,Gupta Car Care,Varanasi,auto
+GRG0054,Sarin Motors,Saharsa,auto
+GRG0055,Yohannan Car Care,Bharatpur,auto
+GRG0056,Sankar Car Care,Bathinda,auto
+GRG0057,Murthy Motors,Dewas,auto
+GRG0058,Tripathi Service Centre,Alappuzha,auto
+GRG0059,Narain Automobiles,Sagar,auto
+GRG0060,Datta Motors,Bidar,auto
+GRG0061,Raghavan Service Centre,Tadepalligudem,auto
+GRG0062,Mitra Motors,Motihari,auto
+GRG0063,Acharya Service Centre,Baranagar,auto
+GRG0064,Kade Car Care,Adoni,auto
+GRG0065,Nagy Motors,Mango,auto
+GRG0066,Sathe Automobiles,Sasaram,auto
+GRG0067,Solanki Motors,Guwahati,auto
+GRG0068,Mander Car Care,Tiruchirappalli,auto
+GRG0069,Keer Motors,Kamarhati,auto
+GRG0070,Issac Automobiles,Nagpur,auto
+CTR0001,Batra Infra Projects,Fatehpur,property
+CTR0002,Bora Civil Works,Vijayanagaram,property
+CTR0003,Hayer Builders,Shimla,property
+CTR0004,Ratta Infra Projects,Siliguri,property
+CTR0005,Ahluwalia Infra Projects,Khandwa,property
+CTR0006,Kanda Infra Projects,Kadapa,property
+CTR0007,Shetty Infra Projects,Proddatur,property
+CTR0008,Krish Constructions,Sirsa,property
+CTR0009,Deol Infra Projects,Bettiah,property
+CTR0010,Nadig Constructions,Pudukkottai,property
+CTR0011,Thaman Infra Projects,Motihari,property
+CTR0012,Sehgal Restoration Services,Fatehpur,property
+CTR0013,Sengupta Civil Works,Shahjahanpur,property
+CTR0014,Malhotra Civil Works,Mathura,property
+CTR0015,Maharaj Civil Works,Solapur,property
+CTR0016,Mangal Civil Works,Darbhanga,property
+CTR0017,Nayak Civil Works,Panvel,property
+CTR0018,Buch Civil Works,Saharanpur,property
+CTR0019,Kashyap Builders,Jamnagar,property
+CTR0020,Kala Infra Projects,Vijayanagaram,property
+CTR0021,Reddy Restoration Services,Hosur,property
+CTR0022,Shukla Constructions,Ghaziabad,property
+CTR0023,Jhaveri Restoration Services,Pali,property
+CTR0024,Bahri Infra Projects,Morena,property
+CTR0025,Ahuja Infra Projects,Bihar Sharif,property
+CTR0026,Ramakrishnan Infra Projects,Siwan,property
+CTR0027,Kannan Restoration Services,Muzaffarnagar,property
+CTR0028,Mahajan Civil Works,Shivpuri,property
+CTR0029,Balakrishnan Constructions,Naihati,property
+CTR0030,Ravel Civil Works,Bhind,property
+CTR0031,Datta Civil Works,Singrauli,property
+CTR0032,Bala Constructions,Haldia,property
+CTR0033,Deshmukh Constructions,South Dumdum,property
+CTR0034,Bedi Builders,Nadiad,property
+CTR0035,Narang Builders,Malda,property
+CTR0036,Narain Restoration Services,Nadiad,property
+CTR0037,Mall Restoration Services,Nizamabad,property
+CTR0038,Bumb Builders,Surat,property
+CTR0039,Zacharia Restoration Services,Etawah,property
+CTR0040,Kapur Civil Works,Thane,property
+CTR0041,Balasubramanian Constructions,Kollam,property
+CTR0042,Bahri Constructions,Mathura,property
+CTR0043,Date Constructions,Raipur,property
+CTR0044,Kamdar Restoration Services,Bardhaman,property
+CTR0045,Pillay Constructions,Medininagar,property
+CTR0046,Contractor Civil Works,Bijapur,property
+CTR0047,Chokshi Constructions,Bijapur,property
+CTR0048,Prashad Restoration Services,Davanagere,property
+CTR0049,Borra Constructions,Kota,property
+CTR0050,Mitra Builders,Buxar,property
