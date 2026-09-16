@@ -32,7 +32,7 @@ It's a strong ML use case because it has all the hard parts of real-world modeli
 | `data/processed/` | *(created when you run the pipeline)* | Model-ready features and a separate labels file. Not committed — regenerate with `feature_engineering.py`. |
 | `models/` | `isolation_forest_model.pkl`, `scaler.pkl`, `feature_columns.json` | **Pre-trained artifacts — already trained and ready to use.** The API loads these at startup. |
 | `reports/figures/` | 6 PNG charts | Evaluation visualizations (ROC, PR, confusion matrix, risk buckets, score distribution, feature correlation). Already generated. |
-| `src/` | `generate_data.py`, `feature_engineering.py`, `train_model.py`, `visualize_results.py` | The full pipeline: data generation → feature engineering → training/evaluation → charts. |
+| `source_code/` | `generate_data.py`, `feature_engineering.py`, `train_model.py`, `visualize_results.py` | The full pipeline: data generation → feature engineering → training/evaluation → charts. |
 | `api/` | `main.py` | FastAPI backend serving the trained model: `/score_claim`, `/score_batch`, `/health`. |
 | `frontend/` | `index.html` | Single-file browser UI to test the API through a form — no JSON or code required. |
 | `requirements.txt` | Python dependencies | Everything needed for the pipeline and the API. |
