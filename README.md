@@ -196,9 +196,9 @@ insurance-fraud-detection/
 │   └── processed/                   # insurance_claims_features.csv, insurance_claims_labels.csv
 ├── models/                          # isolation_forest_model.pkl, scaler.pkl, feature_columns.json
 ├── notebooks/                       # exploration and analysis
-├── reports/
+├── charts/
 │   └── figures/                     # evaluation charts (PNG)
-├── src/
+├── source_code/
 │   ├── generate_data.py             # synthetic dataset with injected fraud patterns
 │   ├── feature_engineering.py       # leakage-safe preprocessing + scaler
 │   ├── train_model.py               # Isolation Forest, rule score, evaluation
