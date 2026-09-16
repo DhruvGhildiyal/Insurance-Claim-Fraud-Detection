@@ -86,27 +86,27 @@ All metrics are on a **held-out, stratified 20% test set**: 2,000 claims, 100 of
 **Reviewing just 3.4% of claims catches 36% of all fraud.** Widening to High + Medium (8.5% of claims) catches **70%**.
 
 ### ROC Curve
-![ROC curve](reports/figures/roc_curve.png)
+<img width="1142" height="992" alt="roc_curve" src="https://github.com/user-attachments/assets/e51798a8-3d73-44a6-b9be-61e425afa369" />
 *Both methods rank fraud well above random: the rule score reaches ROC-AUC 0.918 and the Isolation Forest 0.862. The marker shows the model's operating point at the 5% contamination threshold.*
 
 ### Precision-Recall Curve
-![Precision-recall curve](reports/figures/precision_recall_curve.png)
+<img width="1142" height="992" alt="precision_recall_curve" src="https://github.com/user-attachments/assets/25106213-7fe9-466b-a29b-1afc1c0a9a8b" />
 *PR-AUC of 0.361 is 7.2× the 5% random baseline. The diamond marks the High risk bucket at 52.9% precision — the highest precision of any strategy tested.*
 
 ### Confusion Matrix
-![Confusion matrix](reports/figures/confusion_matrix.png)
+<img width="1134" height="947" alt="confusion_matrix" src="https://github.com/user-attachments/assets/0d50486c-ea5d-4873-bf87-6576ea0e80f4" />
 *At the 5% threshold the model catches 41 of 100 fraud cases, sends 55 genuine claims (2.9% of all genuine claims) to review, and misses 59 fraud cases.*
 
 ### Risk Bucket Analysis
-![Risk bucket analysis](reports/figures/risk_bucket_analysis.png)
+<img width="1967" height="887" alt="risk_bucket_analysis" src="https://github.com/user-attachments/assets/432b60b6-9a91-4afe-849b-4ad455148c5f" />
 *Only 68 of 2,000 claims land in High, but 52.9% of them are fraud. Low holds 1,831 claims at a 1.6% fraud rate, so most of the book can be safely deprioritised.*
 
 ### Anomaly Score Distribution
-![Anomaly score distribution](reports/figures/anomaly_score_distribution.png)
+<img width="1367" height="887" alt="anomaly_score_distribution" src="https://github.com/user-attachments/assets/2cb9a13b-ba3a-433b-9b80-71c4bb820b7d" />
 *Fraud claims skew toward higher anomaly scores, but the distributions overlap substantially. That overlap is why the model alone reaches only 42.7% precision, and why pairing it with rules helps.*
 
 ### Feature Correlation with Fraud
-![Feature correlation](reports/figures/feature_correlation.png)
+<img width="1442" height="947" alt="feature_correlation" src="https://github.com/user-attachments/assets/35f4e551-ec40-47e1-815a-1d3febaade2c" />
 *The strongest signals are the near-coverage-limit flag (+0.316; 40.2% of flagged claims are fraud) and round claim amounts (+0.303; 29.8%). Calendar features sit near zero. Analysis only — never used for training.*
 
 ## Key Engineering Decisions
