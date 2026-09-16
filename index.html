@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim Fraud Risk Scorer</title>
+<style>
+  :root {
+    --bg: #f4f6fa;
+    --card: #ffffff;
+    --border: #e3e8ef;
+    --input-border: #cfd6e0;
+    --text: #1a2230;
+    --muted: #5b6778;
+    --primary: #2554c7;
+    --primary-hover: #1d44a3;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 14px rgba(16, 24, 40, 0.06);
+
+    --high-bg: #fde8e7;   --high-text: #a4161a;   --high-border: #f1a7a3;
+    --medium-bg: #fff4d6; --medium-text: #8a5300; --medium-border: #f2c661;
+    --low-bg: #e3f6ea;    --low-text: #17663a;    --low-border: #9fd8b5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* ---------- Header ---------- */
+  header {
+    display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-bottom: 20px;
+  }
+  header h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.01em; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: inherit; font-size: 0.82rem; font-weight: 600;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); cursor: pointer; white-space: nowrap;
+  }
+  .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #98a2b3; }
+  .status.online  { color: var(--low-text);  border-color: var(--low-border); background: var(--low-bg); }
+  .status.online::before  { background: var(--low-text); }
+  .status.offline { color: var(--high-text); border-color: var(--high-border); background: var(--high-bg); }
+  .status.offline::before { background: var(--high-text); }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    margin-bottom: 20px; padding: 14px 16px;
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .toolbar .label { font-weight: 600; color: var(--muted); margin-right: 4px; font-size: 0.9rem; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    font: inherit; font-weight: 600; font-size: 0.92rem;
+    padding: 9px 16px; border-radius: 8px; border: 1px solid transparent;
+    cursor: pointer; transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(37, 84, 199, 0.3); }
+  .btn-primary { background: var(--primary); color: #fff; padding: 12px 26px; font-size: 1rem; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:disabled { background: #8aa1d9; cursor: wait; }
+  .btn-secondary { background: #fff; color: var(--text); border-color: var(--input-border); }
+  .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-ghost { background: transparent; color: var(--muted); }
+  .btn-ghost:hover { color: var(--text); }
+
+  /* ---------- Form cards ---------- */
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px;
+  }
+  .card h2 {
+    margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    font-size: 0.8rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted);
+  }
+
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field-label {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;
+  }
+  .api-name { font-family: Consolas, "SFMono-Regular", Menlo, monospace; font-size: 0.72rem; font-weight: 400; color: #8a94a6; }
+  .hint { margin: 4px 0 0; font-size: 0.78rem; color: var(--muted); }
+
+  input[type="text"], input[type="number"], input[type="date"], select {
+    width: 100%; padding: 9px 11px; font: inherit; font-size: 0.95rem; color: inherit;
+    background: #fff; border: 1px solid var(--input-border); border-radius: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 84, 199, 0.18); }
+  input:disabled { background: #eef1f5; color: #98a2b3; border-color: #e1e5eb; cursor: not-allowed; }
+
+  .with-prefix { position: relative; }
+  .with-prefix span { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .with-prefix input { padding-left: 26px; }
+  .is-disabled .with-prefix span { color: #b6bec9; }
+
+  .inline-check {
+    display: inline-flex; align-items: center; gap: 7px; margin-top: 7px;
+    font-size: 0.85rem; color: var(--muted); cursor: pointer; user-select: none;
+  }
+  .inline-check input { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+
+  /* ---------- Toggle switches ---------- */
+  .switch { display: flex; align-items: center; gap: 12px; padding: 8px 0; cursor: pointer; user-select: none; }
+  .switch + .switch { border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 4px; }
+  .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .switch .track {
+    position: relative; flex: none; width: 44px; height: 24px; border-radius: 999px;
+    background: var(--input-border); transition: background 0.15s;
+  }
+  .switch .track::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); transition: transform 0.15s;
+  }
+  .switch input:checked + .track { background: var(--primary); }
+  .switch input:checked + .track::after { transform: translateX(20px); }
+  .switch input:focus-visible + .track { box-shadow: 0 0 0 3px rgba(37, 84, 199, 0.3); }
+  .switch-text strong { display: block; font-size: 0.9rem; }
+  .switch-text small { color: var(--muted); font-size: 0.78rem; }
+  .switch-state { margin-left: auto; font-size: 0.78rem; font-weight: 700; color: var(--muted); min-width: 28px; text-align: right; }
+
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+  .actions .endpoint { color: var(--muted); font-size: 0.82rem; }
+
+  /* ---------- Result ---------- */
+  #result { margin-top: 28px; }
+  #result:empty { display: none; }
+
+  .result-card { border-left: 6px solid var(--border); }
+  .result-card.high   { border-left-color: var(--high-text); }
+  .result-card.medium { border-left-color: var(--medium-border); }
+  .result-card.low    { border-left-color: var(--low-text); }
+
+  .result-head { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 20px; border-radius: 999px; border: 2px solid;
+    font-size: 1.3rem; font-weight: 800; letter-spacing: 0.03em;
+  }
+  .badge.high   { background: var(--high-bg);   color: var(--high-text);   border-color: var(--high-border); }
+  .badge.medium { background: var(--medium-bg); color: var(--medium-text); border-color: var(--medium-border); }
+  .badge.low    { background: var(--low-bg);    color: var(--low-text);    border-color: var(--low-border); }
+  .badge.unknown { background: #eef1f5; color: var(--muted); border-color: var(--input-border); }
+  .result-note { margin: 0; color: var(--muted); max-width: 520px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 640px) { .metrics { grid-template-columns: 1fr; } }
+  .metric { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: #fafbfd; }
+  .metric .name { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+  .metric .value { font-size: 1.6rem; font-weight: 700; margin: 2px 0; font-variant-numeric: tabular-nums; word-break: break-all; }
+  .metric .sub { font-size: 0.82rem; color: var(--muted); }
+  .meter { height: 8px; border-radius: 999px; background: #e6eaf0; overflow: hidden; margin-top: 6px; }
+  .meter span { display: block; height: 100%; background: var(--primary); border-radius: 999px; }
+
+  .result-section h3 { margin: 0 0 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .result-section { margin-bottom: 18px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .chip { padding: 5px 12px; border-radius: 999px; font-size: 0.86rem; background: #eef2ff; color: #2d3a8c; border: 1px solid #d4dbfb; }
+  .muted { color: var(--muted); margin: 0; }
+  .explanation { margin: 0; padding: 12px 14px; background: #f7f9fc; border: 1px solid var(--border); border-radius: 8px; }
+
+  details { margin-top: 6px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+  pre {
+    margin: 10px 0 0; padding: 12px; overflow-x: auto; font-size: 0.8rem;
+    background: #0f172a; color: #e2e8f0; border-radius: 8px;
+  }
+
+  .error-card { border-left: 6px solid var(--high-text); background: #fffafa; }
+  .error-card h3 { margin: 0 0 6px; color: var(--high-text); font-size: 1.05rem; }
+  .error-card ul { margin: 8px 0 0; padding-left: 20px; }
+  .error-card li { margin-bottom: 4px; }
+  .error-card code { font-family: Consolas, Menlo, monospace; font-size: 0.85rem; background: #fdecec; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <h1>Claim Fraud Risk Scorer</h1>
+      <p>Manual test console for the <code>/score_claim</code> API &middot; Isolation Forest + business rules</p>
+    </div>
+    <button type="button" id="api-status" class="status" title="Click to re-check">Checking API…</button>
+  </header>
+
+  <div class="toolbar">
+    <span class="label">Quick fill:</span>
+    <button type="button" class="btn btn-secondary" data-sample="suspicious">Load Sample: Suspicious Claim</button>
+    <button type="button" class="btn btn-secondary" data-sample="genuine">Load Sample: Genuine Claim</button>
+  </div>
+
+  <form id="claim-form" autocomplete="off">
+    <div class="grid">
+
+      <!-- ===================== Claim Details ===================== -->
+      <section class="card">
+        <h2>Claim Details</h2>
+
+        <div class="field">
+          <label class="field-label" for="claim_id">Claim ID <span class="api-name">claim_id</span></label>
+          <input type="text" id="claim_id" required placeholder="e.g. CLM_TEST_001">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="claim_type">Claim type <span class="api-name">claim_type</span></label>
+          <select id="claim_type" required>
+            <option value="" disabled selected>Select a type…</option>
+            <option value="auto">Auto</option>
+            <option value="health">Health</option>
+            <option value="property">Property</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="claim_amount">Claim amount <span class="api-name">claim_amount</span></label>
+          <div class="with-prefix">
+            <span aria-hidden="true">₹</span>
+            <input type="number" id="claim_amount" min="1" step="any" required placeholder="e.g. 48370">
+          </div>
+          <p class="hint">Amount claimed, in INR</p>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="hospital_garage_code">Provider code <span class="api-name">hospital_garage_code</span></label>
+          <input type="text" id="hospital_garage_code" required placeholder="e.g. HSP0042 / GRG0017 / CTR0005">
+          <label class="inline-check">
+            <input type="checkbox" id="unknown_provider"> Unknown provider
+          </label>
+        </div>
+      </section>
+
+      <!-- ===================== Policy & History ===================== -->
+      <section class="card">
+        <h2>Policy &amp; History</h2>
+
+        <div class="field">
+          <label class="field-label" for="policy_coverage_limit">Coverage limit <span class="api-name">policy_coverage_limit</span></label>
+          <div class="with-prefix">
+            <span aria-hidden="true">₹</span>
+            <input type="number" id="policy_coverage_limit" min="1" step="any" required placeholder="e.g. 400000">
+          </div>
+          <p class="hint">Policy sum insured, in INR</p>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="policy_renewal_date">Most recent renewal <span class="api-name">policy_renewal_date</span></label>
+          <input type="date" id="policy_renewal_date" required>
+          <label class="inline-check">
+            <input type="checkbox" id="never_renewed"> Never renewed
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="claimant_avg_past_claim">Average past claim <span class="api-name">claimant_avg_past_claim</span></label>
+          <div class="with-prefix">
+            <span aria-hidden="true">₹</span>
+            <input type="number" id="claimant_avg_past_claim" min="0" step="any" required placeholder="e.g. 61250">
+          </div>
+          <label class="inline-check">
+            <input type="checkbox" id="first_time_claimant"> First-time claimant (no history)
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="claimant_claim_count_6m">Claims in last 6 months <span class="api-name">claimant_claim_count_6m</span></label>
+          <input type="number" id="claimant_claim_count_6m" min="0" step="1" required placeholder="e.g. 1">
+          <p class="hint">Including this claim</p>
+        </div>
+      </section>
+
+      <!-- ===================== Timing ===================== -->
+      <section class="card">
+        <h2>Timing</h2>
+
+        <div class="field">
+          <label class="field-label" for="claim_filed_date">Claim filed date <span class="api-name">claim_filed_date</span></label>
+          <input type="date" id="claim_filed_date" required>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="days_policy_to_claim">Days from policy start to claim <span class="api-name">days_policy_to_claim</span></label>
+          <input type="number" id="days_policy_to_claim" min="0" step="1" required placeholder="e.g. 1040">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="days_incident_to_claim">Days from incident to claim <span class="api-name">days_incident_to_claim</span></label>
+          <input type="number" id="days_incident_to_claim" min="0" step="1" required placeholder="e.g. 3">
+          <p class="hint">Cannot be larger than days from policy start</p>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="is_weekend_filed" role="switch">
+          <span class="track" aria-hidden="true"></span>
+          <span class="switch-text">
+            <strong>Filed on a weekend</strong>
+            <small>Auto-set from the filed date; you can override</small>
+          </span>
+          <span class="switch-state" aria-hidden="true">No</span>
+        </label>
+      </section>
+
+      <!-- ===================== Recent Changes ===================== -->
+      <section class="card">
+        <h2>Recent Changes</h2>
+
+        <label class="switch">
+          <input type="checkbox" id="claimant_address_changed_recently" role="switch">
+          <span class="track" aria-hidden="true"></span>
+          <span class="switch-text">
+            <strong>Address changed recently</strong>
+            <small>Within 30 days before filing</small>
+          </span>
+          <span class="switch-state" aria-hidden="true">No</span>
+        </label>
+
+        <label class="switch">
+          <input type="checkbox" id="claimant_bank_details_changed_recently" role="switch">
+          <span class="track" aria-hidden="true"></span>
+          <span class="switch-text">
+            <strong>Bank details changed recently</strong>
+            <small>Within 30 days before filing</small>
+          </span>
+          <span class="switch-state" aria-hidden="true">No</span>
+        </label>
+      </section>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="submit-btn" class="btn btn-primary">Score This Claim</button>
+      <button type="reset" class="btn btn-ghost">Clear form</button>
+      <span class="endpoint" id="endpoint-label"></span>
+    </div>
+  </form>
+
+  <section id="result" aria-live="polite"></section>
+</div>
+
+<script>
+/*
+ * CORS NOTE
+ * ---------
+ * This page is served from a different origin than the API: file:// (origin "null")
+ * or e.g. http://127.0.0.1:5500, while the API is http://127.0.0.1:8000. A JSON POST
+ * sends a CORS preflight (OPTIONS) request first. If api/main.py has no CORS middleware,
+ * the browser blocks the call and fetch() throws a network error. The page catches that
+ * and shows an "API unreachable / blocked by CORS" message; DevTools -> Console shows the
+ * exact CORS error. Fix: add CORSMiddleware to api/main.py.
+ */
+const API_BASE_URL = "http://127.0.0.1:8000";
+const REQUEST_TIMEOUT_MS = 15000;
+const MAX_RULE_SCORE = 6;
+
+// ---------------------------------------------------------------------------
+// Sample claims
+// ---------------------------------------------------------------------------
+const SAMPLES = {
+  // Near coverage limit (96.7%), early policy claim (21 days), recent bank change,
+  // plus a late report and a round amount - should come back Medium or High.
+  suspicious: {
+    claim_id: "CLM_TEST_SUS_001",
+    claim_type: "health",
+    claim_amount: 290000,
+    policy_coverage_limit: 300000,
+    claimant_avg_past_claim: null,          // first-time claimant
+    claimant_claim_count_6m: 1,
+    hospital_garage_code: "HSP0042",
+    policy_renewal_date: null,              // never renewed
+    claim_filed_date: "2026-09-10",         // Thursday
+    days_policy_to_claim: 21,
+    days_incident_to_claim: 17,
+    claimant_address_changed_recently: false,
+    claimant_bank_details_changed_recently: true,
+    is_weekend_filed: false,
+  },
+  // Policy ~3 years old (started 2023-11-03, renewed 2025-11-03), itemised amount below
+  // the claimant's usual claim, reported 3 days after the incident, no recent changes.
+  genuine: {
+    claim_id: "CLM_TEST_GEN_001",
+    claim_type: "auto",
+    claim_amount: 48370,
+    policy_coverage_limit: 400000,
+    claimant_avg_past_claim: 61250,
+    claimant_claim_count_6m: 1,
+    hospital_garage_code: "GRG0017",
+    policy_renewal_date: "2025-11-03",
+    claim_filed_date: "2026-09-08",         // Tuesday
+    days_policy_to_claim: 1040,
+    days_incident_to_claim: 3,
+    claimant_address_changed_recently: false,
+    claimant_bank_details_changed_recently: false,
+    is_weekend_filed: false,
+  },
+};
+
+const RISK_META = {
+  high:   { icon: "▲", label: "HIGH RISK",   note: "The Isolation Forest flagged an anomaly AND 2+ business rules fired. Prioritise for investigation." },
+  medium: { icon: "◆", label: "MEDIUM RISK", note: "Only one signal (the model or the rules) raised a concern. Review if capacity allows." },
+  low:    { icon: "✓", label: "LOW RISK",    note: "Neither the model nor the rules flagged this claim." },
+};
+
+// Checkbox -> field it disables (disabled/empty fields are sent as null)
+const NULLABLE_FIELDS = [
+  { toggle: "first_time_claimant", input: "claimant_avg_past_claim" },
+  { toggle: "unknown_provider",    input: "hospital_garage_code" },
+  { toggle: "never_renewed",       input: "policy_renewal_date" },
+];
+
+const BOOLEAN_FIELDS = [
+  "claimant_address_changed_recently",
+  "claimant_bank_details_changed_recently",
+  "is_weekend_filed",
+];
+
+const $ = (id) => document.getElementById(id);
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined && text !== null) node.textContent = text;   // textContent: no HTML injection
+  return node;
+}
+
+// ---------------------------------------------------------------------------
+// Form behaviour
+// ---------------------------------------------------------------------------
+function syncNullableField({ toggle, input }) {
+  const isNull = $(toggle).checked;
+  const field = $(input);
+  field.disabled = isNull;               // disabled inputs skip "required" validation
+  if (isNull) field.value = "";
+  field.closest(".field").classList.toggle("is-disabled", isNull);
+}
+
+function syncSwitchLabels() {
+  document.querySelectorAll(".switch").forEach((sw) => {
+    const input = sw.querySelector("input");
+    sw.querySelector(".switch-state").textContent = input.checked ? "Yes" : "No";
+  });
+}
+
+function syncAll() {
+  NULLABLE_FIELDS.forEach(syncNullableField);
+  syncSwitchLabels();
+}
+
+function autoSetWeekend() {
+  const value = $("claim_filed_date").value;
+  if (!value) return;
+  const day = new Date(`${value}T00:00:00`).getDay();   // local date, 0 = Sunday
+  $("is_weekend_filed").checked = day === 0 || day === 6;
+  syncSwitchLabels();
+}
+
+function loadSample(name) {
+  const sample = SAMPLES[name];
+  for (const [key, value] of Object.entries(sample)) {
+    const input = $(key);
+    if (!input) continue;
+    if (input.type === "checkbox") input.checked = Boolean(value);
+    else input.value = value ?? "";
+  }
+  $("first_time_claimant").checked = sample.claimant_avg_past_claim === null;
+  $("unknown_provider").checked = sample.hospital_garage_code === null;
+  $("never_renewed").checked = sample.policy_renewal_date === null;
+  syncAll();
+  clearResult();
+}
+
+// ---------------------------------------------------------------------------
+// Payload
+// ---------------------------------------------------------------------------
+function readText(id) {
+  const input = $(id);
+  const value = input.value.trim();
+  return input.disabled || value === "" ? null : value;
+}
+
+function readNumber(id, integer = false) {
+  const input = $(id);
+  if (input.disabled || input.value.trim() === "") return null;
+  const number = Number(input.value);
+  return integer ? Math.trunc(number) : number;
+}
+
+function buildPayload() {
+  const payload = {
+    claim_id: readText("claim_id"),
+    policy_renewal_date: readText("policy_renewal_date"),     // "YYYY-MM-DD" or null
+    claim_filed_date: readText("claim_filed_date"),
+    claim_type: readText("claim_type"),
+    claim_amount: readNumber("claim_amount"),
+    policy_coverage_limit: readNumber("policy_coverage_limit"),
+    claimant_avg_past_claim: readNumber("claimant_avg_past_claim"),
+    claimant_claim_count_6m: readNumber("claimant_claim_count_6m", true),
+    hospital_garage_code: readText("hospital_garage_code"),
+    days_policy_to_claim: readNumber("days_policy_to_claim", true),
+    days_incident_to_claim: readNumber("days_incident_to_claim", true),
+  };
+  BOOLEAN_FIELDS.forEach((id) => { payload[id] = $(id).checked; });   // always true/false
+  return payload;
+}
+
+// ---------------------------------------------------------------------------
+// API calls
+// ---------------------------------------------------------------------------
+async function scoreClaim(event) {
+  event.preventDefault();                 // browser "required"/min checks already passed
+  const payload = buildPayload();
+  setLoading(true);
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/score_claim`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    const body = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      renderError(describeApiError(response.status, body));
+      return;
+    }
+    if (!body || typeof body.combined_risk_level !== "string") {
+      renderError({ title: "Unexpected response from the API", details: ["The response did not contain a combined_risk_level."], raw: body });
+      return;
+    }
+    renderResult(body);
+  } catch (error) {
+    if (error.name === "AbortError") {
+      renderError({ title: "Request timed out", details: [`No response from ${API_BASE_URL} within ${REQUEST_TIMEOUT_MS / 1000}s.`] });
+    } else {
+      renderError({
+        title: "Could not reach the API",
+        details: [
+          `No response from ${API_BASE_URL}. Check that uvicorn is running (uvicorn api.main:app --reload from the project root).`,
+          "If the server IS running, the browser probably blocked the request because of CORS. Open DevTools → Console to confirm, then add CORSMiddleware to api/main.py.",
+        ],
+      });
+    }
+  } finally {
+    clearTimeout(timer);
+    setLoading(false);
+  }
+}
+
+function describeApiError(status, body) {
+  const titles = {
+    400: "Invalid claim input (400)",
+    422: "Invalid claim input (422)",
+    500: "Server error while scoring (500)",
+    503: "Model not loaded (503)",
+  };
+  const details = [];
+  if (body && Array.isArray(body.errors)) {                 // api/main.py custom 400 format
+    body.errors.forEach((e) => details.push(`${e.field}: ${e.message}`));
+  } else if (body && typeof body.detail === "string") {     // HTTPException format
+    details.push(body.detail);
+  } else if (body && Array.isArray(body.detail)) {          // FastAPI default 422 format
+    body.detail.forEach((e) => details.push(`${(e.loc || []).filter((p) => p !== "body").join(".")}: ${e.msg}`));
+  } else {
+    details.push("The API returned an error without details.");
+  }
+  if (status === 503) details.push("Check the uvicorn logs: the model artefacts in models/ failed to load.");
+  return { title: titles[status] || `Request failed (${status})`, details, raw: body };
+}
+
+async function checkHealth() {
+  const pill = $("api-status");
+  const setStatus = (state, text) => { pill.className = `status ${state}`; pill.textContent = text; };
+  setStatus("", "Checking API…");
+  try {
+    const response = await fetch(`${API_BASE_URL}/health`);
+    const body = await response.json().catch(() => ({}));
+    if (response.ok && body.model_loaded) setStatus("online", "API online · model loaded");
+    else if (response.status === 503) setStatus("offline", "API up · model NOT loaded");
+    else setStatus("offline", `API error (${response.status})`);
+  } catch {
+    setStatus("offline", "API unreachable (not running or blocked by CORS)");
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+function setLoading(isLoading) {
+  const button = $("submit-btn");
+  button.disabled = isLoading;
+  button.textContent = isLoading ? "Scoring…" : "Score This Claim";
+}
+
+function clearResult() {
+  $("result").replaceChildren();
+}
+
+function metric(name, value, sub, meterPercent) {
+  const box = el("div", "metric");
+  box.append(el("div", "name", name), el("div", "value", value));
+  if (meterPercent !== undefined) {
+    const meter = el("div", "meter");
+    const fill = el("span");
+    fill.style.width = `${Math.max(0, Math.min(100, meterPercent))}%`;
+    meter.append(fill);
+    box.append(meter);
+  }
+  if (sub) box.append(el("div", "sub", sub));
+  return box;
+}
+
+function rawJsonBlock(data) {
+  const details = el("details");
+  details.append(el("summary", null, "Show raw JSON response"), el("pre", null, JSON.stringify(data, null, 2)));
+  return details;
+}
+
+function renderResult(data) {
+  const key = data.combined_risk_level.toLowerCase();
+  const meta = RISK_META[key] || { icon: "?", label: `${data.combined_risk_level.toUpperCase()} RISK`, note: "" };
+  const cssClass = RISK_META[key] ? key : "unknown";
+
+  const card = el("div", `card result-card ${cssClass}`);
+
+  // Badge: colour AND icon AND text, so the level never depends on colour alone
+  const head = el("div", "result-head");
+  const badge = el("span", `badge ${cssClass}`);
+  badge.append(el("span", null, meta.icon), el("span", null, meta.label));
+  head.append(badge, el("p", "result-note", meta.note));
+  card.append(head);
+
+  const score = Number(data.anomaly_score);
+  const rules = Number(data.rule_score);
+  const metrics = el("div", "metrics");
+  metrics.append(
+    metric("Anomaly score", Number.isFinite(score) ? score.toFixed(4) : "n/a",
+           data.if_anomaly ? "Isolation Forest: ANOMALY (flagged)" : "Isolation Forest: normal"),
+    metric("Rule score", `${rules} / ${MAX_RULE_SCORE}`,
+           `${rules} of ${MAX_RULE_SCORE} red-flag rules triggered`, (rules / MAX_RULE_SCORE) * 100),
+    metric("Claim ID", data.claim_id ?? "n/a", "As returned by the API"),
+  );
+  card.append(metrics);
+
+  const rulesSection = el("div", "result-section");
+  rulesSection.append(el("h3", null, "Triggered rules"));
+  const triggered = Array.isArray(data.triggered_rules) ? data.triggered_rules : [];
+  if (triggered.length) {
+    const list = el("ul", "chips");
+    triggered.forEach((rule) => list.append(el("li", "chip", rule)));
+    rulesSection.append(list);
+  } else {
+    rulesSection.append(el("p", "muted", "No rule flags triggered."));
+  }
+  card.append(rulesSection);
+
+  const explanationSection = el("div", "result-section");
+  explanationSection.append(el("h3", null, "Explanation"), el("p", "explanation", data.explanation || "No explanation returned."));
+  card.append(explanationSection);
+
+  card.append(rawJsonBlock(data));
+
+  $("result").replaceChildren(card);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderError({ title, details = [], raw }) {
+  const card = el("div", "card error-card");
+  card.append(el("h3", null, title));
+  if (details.length) {
+    const list = el("ul");
+    details.forEach((line) => list.append(el("li", null, line)));
+    card.append(list);
+  }
+  if (raw) card.append(rawJsonBlock(raw));
+  $("result").replaceChildren(card);
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ---------------------------------------------------------------------------
+// Wire up
+// ---------------------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  $("endpoint-label").textContent = `POST ${API_BASE_URL}/score_claim`;
+
+  NULLABLE_FIELDS.forEach((pair) => $(pair.toggle).addEventListener("change", () => syncNullableField(pair)));
+  document.querySelectorAll(".switch input").forEach((input) => input.addEventListener("change", syncSwitchLabels));
+  $("claim_filed_date").addEventListener("change", autoSetWeekend);
+
+  document.querySelectorAll("[data-sample]").forEach((button) =>
+    button.addEventListener("click", () => loadSample(button.dataset.sample)));
+
+  const form = $("claim-form");
+  form.addEventListener("submit", scoreClaim);
+  // The "reset" event fires BEFORE values are cleared, so re-sync on the next tick
+  form.addEventListener("reset", () => setTimeout(() => { syncAll(); clearResult(); }, 0));
+
+  $("api-status").addEventListener("click", checkHealth);
+
+  syncAll();
+  checkHealth();
+});
+</script>
+</body>
+</html>
