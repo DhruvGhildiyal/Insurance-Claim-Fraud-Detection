@@ -52,10 +52,10 @@ Run these four scripts **in this exact order** — each one depends on the outpu
 
 | # | Script | Reads | Writes |
 |---|---|---|---|
-| 1 | `src/generate_data.py` | — | `data/raw/insurance_claims.csv`, `data/raw/provider_master.csv` |
-| 2 | `src/feature_engineering.py` | `data/raw/` | `data/processed/` (features + labels), `models/scaler.pkl`, `models/feature_columns.json` |
-| 3 | `src/train_model.py` | `data/processed/` | `models/isolation_forest_model.pkl` + the metrics printed to your terminal |
-| 4 | `src/visualize_results.py` | `data/processed/`, `models/` | The 6 PNGs in `reports/figures/` |
+| 1 | `source_code/generate_data.py` | — | `data/raw/insurance_claims.csv`, `data/raw/provider_master.csv` |
+| 2 | `source_code/feature_engineering.py` | `data/raw/` | `data/processed/` (features + labels), `models/scaler.pkl`, `models/feature_columns.json` |
+| 3 | `source_code/train_model.py` | `data/processed/` | `models/isolation_forest_model.pkl` + the metrics printed to your terminal |
+| 4 | `source_code/visualize_results.py` | `data/processed/`, `models/` | The 6 PNGs in `reports/figures/` |
 
 > ⚠️ **This overwrites the files already in the repo** — everything in `data/`, `models/` and `reports/figures/`. Every script uses a fixed random seed (42), so you should get the same dataset, the same model and the same metrics shown below, as long as your library versions match `requirements.txt`.
 
