@@ -1,0 +1,72 @@
+{
+  "id_column": "claim_id",
+  "model_features": [
+    "claim_amount",
+    "policy_coverage_limit",
+    "claimant_avg_past_claim",
+    "claimant_claim_count_6m",
+    "days_policy_to_claim",
+    "days_incident_to_claim",
+    "claim_to_avg_ratio",
+    "claim_to_limit_ratio",
+    "claim_month",
+    "claim_day_of_week",
+    "is_first_time_claimant",
+    "has_been_renewed",
+    "is_provider_unknown",
+    "is_round_number",
+    "is_early_policy_claim",
+    "is_near_limit",
+    "is_high_frequency_claimant",
+    "is_delayed_reporting",
+    "any_recent_change",
+    "claimant_address_changed_recently",
+    "claimant_bank_details_changed_recently",
+    "is_weekend_filed",
+    "claim_type_auto",
+    "claim_type_health",
+    "claim_type_property"
+  ],
+  "numeric_features": [
+    "claim_amount",
+    "policy_coverage_limit",
+    "claimant_avg_past_claim",
+    "claimant_claim_count_6m",
+    "days_policy_to_claim",
+    "days_incident_to_claim",
+    "claim_to_avg_ratio",
+    "claim_to_limit_ratio",
+    "claim_month",
+    "claim_day_of_week"
+  ],
+  "log_transform_columns": [
+    "claim_amount",
+    "policy_coverage_limit",
+    "claimant_avg_past_claim",
+    "claim_to_avg_ratio"
+  ],
+  "binary_features": [
+    "is_first_time_claimant",
+    "has_been_renewed",
+    "is_provider_unknown",
+    "is_round_number",
+    "is_early_policy_claim",
+    "is_near_limit",
+    "is_high_frequency_claimant",
+    "is_delayed_reporting",
+    "any_recent_change",
+    "claimant_address_changed_recently",
+    "claimant_bank_details_changed_recently",
+    "is_weekend_filed"
+  ],
+  "onehot_features": [
+    "claim_type_auto",
+    "claim_type_health",
+    "claim_type_property"
+  ],
+  "claim_types": [
+    "auto",
+    "health",
+    "property"
+  ]
+}
